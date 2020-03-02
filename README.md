@@ -15,3 +15,6 @@ git clone https://github.com/bulletphysics/bullet3
 pip install pybullet
 ```
 3. Download all files of this repository, and put them all under */bullet3/examples/pybullet/examples/*
+
+## Demo video:
+https://drive.google.com/file/d/1eJQeoz_thZ34yjBygyW0DStb73FIE313
