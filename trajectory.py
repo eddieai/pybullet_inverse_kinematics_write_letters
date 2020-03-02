@@ -9,20 +9,20 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.mixture import GaussianMixture
 from utils import *
 
-ROOT = 'python_data/2Dletters/'
+ROOT = 'python_data/2Dletters/'     # Directory of 2D hand writing letter trajectories data
+
 
 # Locally weighted regression (LWR)
-def LWR_traj(letter):
-    n_states = 20
+def LWR_traj(letter, n_states=20):
     poly_deg = 2 #Degree of the polynomial
     n_out = 2 #number of motion variables
     n_data = 200 #length of trajectory
-    n_samples = 9 #number of demonstrations
+    n_samples = 9 #number of hand writing samples
     t_in = np.linspace(0,1,n_data) #input data for LWR
 
     #  Load Data
     data = np.load(ROOT + letter + '.npy')[1:n_samples+1]
-    # construct the output Y by concatenating all demonstrations
+    # construct the output Y by concatenating all hand writing samples
     data = data.transpose([0,2,1])
     Y = np.concatenate(data,axis=0)
 
@@ -76,12 +76,12 @@ def LWR_traj(letter):
 def GMR_traj(letter, n_states=20):
     n_out = 2  # number of motion variables
     n_data = 200 #length of trajectory
-    n_samples = 9 #number of demonstrations
+    n_samples = 9 #number of hand writing samples
     t_in = np.linspace(0,1,n_data) #input data for LWR
 
     #  Load Data
     data = np.load(ROOT + letter + '.npy')[1:n_samples+1]
-    # construct the output Y by concatenating all demonstrations
+    # construct the output Y by concatenating all hand writing samples
     data = data.transpose([0,2,1])
 
     #  Concatenate time to the data
@@ -126,7 +126,7 @@ def DMP_GMR_traj(letter, n_states=20):
     alpha = 1. #Decay factor
     dt = 0.01 #Length of each trajectory
     n_data = 200 #length of trajectory
-    n_samples = 9 #number of demonstrations
+    n_samples = 9 #number of hand writing samples
     # L = np.hstack([np.eye(n_out)*Kp, np.eye(n_out)*Kv]) #feedback terms
     # t_in = np.arange(0,n_data*dt,dt) #time
 
@@ -135,7 +135,7 @@ def DMP_GMR_traj(letter, n_states=20):
 
     # Load Data
     data = np.load(ROOT + letter + '.npy')[1:n_samples+1]
-    # construct the output Y by concatenating all demonstrations
+    # construct the output Y by concatenating all hand writing samples
     data = data.transpose([0,2,1])
     Y = np.concatenate(data,axis=0)
 
@@ -178,6 +178,7 @@ def DMP_GMR_traj(letter, n_states=20):
     y = data[0,0,:]
     dy = np.zeros((1,n_out))
 
+    # Apply DMP on GMR prediction
     dmp_gmr_traj = []
     for t in range(n_data):
         y_target = y_preds[t]
